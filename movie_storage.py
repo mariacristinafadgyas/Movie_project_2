@@ -2,6 +2,14 @@ import json
 import random
 import matplotlib.pyplot as plt
 import difflib
+import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+API_KEY = os.getenv('API_KEY')
+
+REQUEST_URL = "http://www.omdbapi.com/?apikey=" + API_KEY + "&t="
 
 
 def read_data():
@@ -33,39 +41,32 @@ def add_movie():
     Loads the information from the JSON file, adds the movie,
     and saves it.
     """
-    """Adds new movies to the movies database"""
-    add_title = input("\u001b[35mPlease enter a new movie: \u001b[0m")
-    movie_exists = False
-    while not movie_exists:
+    while True:
+        title = input("\u001b[35mPlease enter a new movie: \u001b[0m")
+        search_rq_url = REQUEST_URL + title
+        movie_info = requests.get(search_rq_url)
+        res_movie_info = movie_info.json()
+        add_title = res_movie_info["Title"]
+
+        movie_exists = False
         for movie in MOVIES_DATABASE:
             if add_title.lower() == movie['title'].lower():
                 movie_exists = True
                 print(f"Movie {add_title} already exist!")
-                add_title = input("\u001b[35mPlease enter a different movie name: \u001b[0m")
                 break
         if not movie_exists:
             break
-    while True:
-        try:
-            add_rating = float(input("\u001b[35mPlease enter a rating: \u001b[0m"))
-            break
-        except ValueError:
-            print("\u001b[31mInvalid input. Please enter a valid float number for the rating.\u001b[0m")
 
-    if 0 > add_rating or add_rating > 10:
-        add_rating = float(input("\u001b[31m\u001b[1mPlease provide a number between 0.0 and 10.0: \u001b[0m"))
-
-    while True:
-        try:
-            add_year = int(input("\u001b[35mPlease enter the year of release: \u001b[0m"))
-            break
-        except ValueError:
-            print("\u001b[31m\u001b[1mInvalid input. Please enter a valid year.\u001b[0m")
+    rating_str = res_movie_info["Ratings"][0]["Value"]
+    add_rating = float(rating_str.split('/')[0])
+    add_year = res_movie_info["Year"]
+    add_poster = res_movie_info["Poster"]
 
     new_movie = {
         "title": add_title,
         "rating": add_rating,
-        "year_of_release": add_year
+        "year_of_release": add_year,
+        "poster": add_poster
     }
     MOVIES_DATABASE.append(new_movie)
     print(f"\u001b[36mMovie {add_title} successfully added")
@@ -183,14 +184,16 @@ def rating_histogram():
 def movies_database():
     display_movies()
     add_movie()
-    delete_movie()
-    update_movie()
-    stats()
-    random_movie()
-    search_movie()
+    # delete_movie()
+    # update_movie()
+    # stats()
+    # random_movie()
+    # search_movie()
     rating_histogram()
-    sort_by_rating()
+    # sort_by_rating()
 
 
 if __name__ == "__main__":
     movies_database()
+
+
