@@ -230,7 +230,7 @@ def generate_html_file(output):
 def movies_database():
     display_movies()
     # add_movie()
-    delete_movie()
+    # delete_movie()
     # update_movie()
     # stats()
     # random_movie()
@@ -238,8 +238,8 @@ def movies_database():
     # rating_histogram()
     # sort_by_rating()
     # serialize_movie()
-    output = serialize_movies()
-    generate_html_file(output)
+    # output = serialize_movies()
+    # generate_html_file(output)
 
 
 if __name__ == "__main__":
