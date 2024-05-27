@@ -16,11 +16,12 @@ def display_welcome_message():
     7. Search movie
     8. Movies sorted by rating
     9. Create Rating Histogram
+    10. Generate Website
     \u001b[0m''')
 
 
 def show_options():
-    user_choice = int(input("\u001b[35mEnter choice (0-9): \u001b[0m"))
+    user_choice = int(input("\u001b[35mEnter choice (0-10): \u001b[0m"))
     if user_choice == 0:
         print("Bye!")
         sys.exit()
@@ -42,8 +43,11 @@ def show_options():
         sort_by_rating()
     elif user_choice == 9:
         rating_histogram()
+    elif user_choice == 10:
+        output = serialize_movies()
+        generate_html_file(output)
     else:
-        print("\u001b[31m\u001b[1mPlease select a number between 1 and 9.\u001b[0m")
+        print("\u001b[31m\u001b[1mPlease select a number between 0 and 10.\u001b[0m")
 
     print()
     input("\u001b[33mPress Enter to continue...")

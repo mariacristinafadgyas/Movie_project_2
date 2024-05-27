@@ -42,20 +42,25 @@ def add_movie():
     and saves it.
     """
     while True:
-        title = input("\u001b[35mPlease enter a new movie: \u001b[0m")
-        search_rq_url = REQUEST_URL + title
-        movie_info = requests.get(search_rq_url)
-        res_movie_info = movie_info.json()
-        add_title = res_movie_info["Title"]
+        try:
+            title = input("\u001b[35mPlease enter a new movie: \u001b[0m")
+            search_rq_url = REQUEST_URL + title
+            movie_info = requests.get(search_rq_url)
+            res_movie_info = movie_info.json()
+            add_title = res_movie_info["Title"]
 
-        movie_exists = False
-        for movie in MOVIES_DATABASE:
-            if add_title.lower() == movie['title'].lower():
-                movie_exists = True
-                print(f"Movie {add_title} already exist!")
+            movie_exists = False
+            for movie in MOVIES_DATABASE:
+                if add_title.lower() == movie['title'].lower():
+                    movie_exists = True
+                    print(f"Movie {add_title} already exist!")
+                    break
+            if not movie_exists:
                 break
-        if not movie_exists:
-            break
+        except ConnectionError:
+            print("\u001b[31m\u001b[1mPlease check your internet connection!\u001b[0m")
+        except KeyError:
+            print("\u001b[31m\u001b[1mPlease provide an actual film name!\u001b[0m")
 
     rating_str = res_movie_info["Ratings"][0]["Value"]
     add_rating = float(rating_str.split('/')[0])
@@ -181,16 +186,60 @@ def rating_histogram():
     plt.savefig('Ratings_chart.png')
 
 
+def serialize_movie(movie_obj):
+    """Receives a movie object as parameter and returns a string containing
+    the desired data for a single movie"""
+    output = ''
+    output += '<li>'
+    output += '<div class="movie">'
+    output += f'<img class="movie-poster" src={movie_obj["poster"]}/>'
+    output += f'<div class="movie-title">{movie_obj["title"]}</div>'
+    output += f'<div class="movie-year">{movie_obj["year_of_release"]}</div>'
+    output += '</div>'
+    output += '</li>'
+    return output
+
+
+def serialize_movies():
+    """Receives a list of dictionaries containing movies data as parameter and returns
+    a string containing the desired data for the whole list of movies"""
+    output = ''
+    for movie in MOVIES_DATABASE:
+        output += serialize_movie(movie)
+    return output
+
+
+def generate_html_file(output):
+    """Receives the output string of the previous function and the path of the HTML
+    template as parameters and generates the HTML file"""
+    with open("index_template.html", "r") as fileobj:
+        template = fileobj.read()
+
+    if "__TEMPLATE_TITLE__" in template:
+        replaced_output = template.replace("__TEMPLATE_TITLE__", "My Favorite Movie App")
+
+    if "__TEMPLATE_MOVIE_GRID__" in template:
+        replaced_output = replaced_output.replace("__TEMPLATE_MOVIE_GRID__", output)
+
+    with open("index.html", "w") as file_output:
+        file_output.write(replaced_output)
+
+    print("\u001b[36mWebsite was generated successfully.\u001b[0m")
+
+
 def movies_database():
     display_movies()
-    add_movie()
-    # delete_movie()
+    # add_movie()
+    delete_movie()
     # update_movie()
     # stats()
     # random_movie()
     # search_movie()
-    rating_histogram()
+    # rating_histogram()
     # sort_by_rating()
+    # serialize_movie()
+    output = serialize_movies()
+    generate_html_file(output)
 
 
 if __name__ == "__main__":
