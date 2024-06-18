@@ -44,14 +44,14 @@ def delete_movie(movie_to_be_deleted):
         if movies_database[i]['title'].lower() == movie_to_be_deleted.lower():
             del movies_database[i]
             print(
-                f"\u001b[36mThe movie \u001b[38;5;160m{movie_to_be_deleted.capitalize()}\u001b[0m \u001b[36m successfully deleted.\u001b[0m")
+                f"\u001b[36mThe movie \u001b[38;5;160m{movie_to_be_deleted.capitalize()}\u001b[0m \u001b[36m "
+                f"successfully deleted.\u001b[0m")
             movie_found = True
             break
     if not movie_found:
         print("\u001b[31m\u001b[1mError! The movie is not part of the database!\u001b[0m")
     sync_database(movies_database)
     return movies_database
-
 
 
 def update_movie(movie_to_be_updated):
@@ -63,7 +63,8 @@ def update_movie(movie_to_be_updated):
         if movies_database[i]['title'].lower() == movie_to_be_updated.lower():
             movies_database[i]['rating'] = float(input("\u001b[35mPlease insert a new rating: "))
             if 0 > movies_database[i]['rating'] or movies_database[i]['rating'] > 10:
-                movies_database[i]['rating'] = float(input("\u001b[31m\u001b[1mPlease provide a rating between 0 and 10: \u001b[0m"))
+                movies_database[i]['rating'] = float(input("\u001b[31m\u001b[1mPlease provide a rating between 0 and "
+                                                           "10: \u001b[0m"))
             print(f"\u001b[36mThe movie {movie_to_be_updated} successfully updated.")
             movie_found = True
             break
@@ -71,4 +72,3 @@ def update_movie(movie_to_be_updated):
         print("\u001b[31m\u001b[1mError! The movie you are trying to update is not part of the database!\u001b[0m")
     sync_database(movies_database)
     return movies_database
-

@@ -19,7 +19,8 @@ def display_movies():
     print()
     print(f"\u001b[38;5;208;1m{len(movies_database)} movies in total\u001b[0m")
     for movie in movies_database:
-        print(f"\u001b[38;5;38;1m{movie['title']}: \u001b[38;5;160;1m{movie['rating']}\u001b[0m, released in \u001b[38;5;28;1m{movie['year_of_release']}\u001b[0m")
+        print(f"\u001b[38;5;38;1m{movie['title']}: \u001b[38;5;160;1m{movie['rating']}\u001b[0m, released in \u001b["
+              f"38;5;28;1m{movie['year_of_release']}\u001b[0m")
 
 
 def add_movie():
@@ -88,7 +89,7 @@ def stats():
         ratings_sum += movie['rating']
         ratings_list.append(movie['rating'])
     average_rating = ratings_sum / len(movies_database)
-    print("\u001b[38;5;129;1mAverage rating: \u001b[0m", round(average_rating,2))
+    print("\u001b[38;5;129;1mAverage rating: \u001b[0m", round(average_rating, 2))
 
     ratings_list.sort()
     length_of_values_list = len(ratings_list)
@@ -98,11 +99,13 @@ def stats():
         median_rating = ratings_list[length_of_values_list // 2]
     print("\u001b[38;5;129;1mMedian rating: \u001b[0m", median_rating)
 
-    best_movie = max(movies_database, key=lambda x:x['rating'])
-    print(f"\u001b[38;5;220;1mBest movie: \u001b[36m{best_movie['title']}, {best_movie['rating']}, {best_movie['year_of_release']}\u001b[0m")
+    best_movie = max(movies_database, key=lambda x: x['rating'])
+    print(f"\u001b[38;5;220;1mBest movie: \u001b[36m{best_movie['title']}, {best_movie['rating']}, "
+          f"{best_movie['year_of_release']}\u001b[0m")
 
-    worst_movie = min(movies_database, key=lambda x:x['rating'])
-    print(f"\u001b[38;5;220;1mWorst movie: \u001b[36m{worst_movie['title']}, {worst_movie['rating']}, {worst_movie['year_of_release']}\u001b[0m")
+    worst_movie = min(movies_database, key=lambda x: x['rating'])
+    print(f"\u001b[38;5;220;1mWorst movie: \u001b[36m{worst_movie['title']}, {worst_movie['rating']}, "
+          f"{worst_movie['year_of_release']}\u001b[0m")
 
     return average_rating, median_rating, best_movie['title'], worst_movie['title']
 
@@ -110,8 +113,9 @@ def stats():
 def random_movie():
     """Displays a random movie to the screen"""
     movies_database = movie_storage.read_data()
-    random_movie = random.choice(movies_database)
-    print(f"\u001b[36mYour movie for tonight: \u001b[38;5;202;1m{random_movie['title']},\u001b[0m \u001b[36mit's rated \u001b[38;5;220;1m{random_movie['rating']}\u001b[0m")
+    sel_random_movie = random.choice(movies_database)
+    print(f"\u001b[36mYour movie for tonight: \u001b[38;5;202;1m{sel_random_movie['title']},"
+          f"\u001b[0m \u001b[36mit's rated \u001b[38;5;220;1m{sel_random_movie['rating']}\u001b[0m")
     return random_movie
 
 
@@ -181,6 +185,7 @@ def serialize_movies():
 def generate_html_file(output):
     """Receives the output string of the previous function and the path of the HTML
     template as parameters and generates the HTML file"""
+    replaced_output = ""
     with open("index_template.html", "r") as fileobj:
         template = fileobj.read()
 
@@ -194,4 +199,3 @@ def generate_html_file(output):
         file_output.write(replaced_output)
 
     print("\u001b[36mWebsite was generated successfully.\u001b[0m")
-
