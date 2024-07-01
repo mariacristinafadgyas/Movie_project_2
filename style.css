@@ -57,7 +57,7 @@ body {
 
 .movie-country {
   color: #666;
-  margin-left: 5px;
+  margin-left: 55px;
 }
 
 .movie-poster {
@@ -87,7 +87,7 @@ body {
 }
 
 .movie-rating {
-  font-size: 0.8em;
+  font-size: 0.7em;
   text-align: center;
   color: #378051;
 }
