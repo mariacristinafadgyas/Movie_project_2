@@ -61,14 +61,12 @@ def update_movie(movie_to_be_updated):
     movie_found = False
     for i in range(len(movies_database)):
         if movies_database[i]['title'].lower() == movie_to_be_updated.lower():
-            movies_database[i]['rating'] = float(input("\u001b[35mPlease insert a new rating: "))
-            if 0 > movies_database[i]['rating'] or movies_database[i]['rating'] > 10:
-                movies_database[i]['rating'] = float(input("\u001b[31m\u001b[1mPlease provide a rating between 0 and "
-                                                           "10: \u001b[0m"))
-            print(f"\u001b[36mThe movie {movie_to_be_updated} successfully updated.")
+            movies_database[i]['note'] = input("\u001b[38;5;49;1mPlease enter movie note 🙄: \u001b[0m")
+            print(f"\u001b[38;5;181;1mThe movie \u001b[38;5;213;1m"
+                  f"{movie_to_be_updated}\u001b[38;5;181;1m was successfully updated.\u001b[0m")
             movie_found = True
             break
     if not movie_found:
-        print("\u001b[31m\u001b[1mError! The movie you are trying to update is not part of the database!\u001b[0m")
+        print("\u001b[38;5;197;1mError! The movie you are trying to update is not part of the database!\u001b[0m")
     sync_database(movies_database)
     return movies_database

@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 import movie_storage
 import requests
+import country_converter as coco
 
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
@@ -51,12 +52,17 @@ def add_movie():
     add_rating = float(rating_str.split('/')[0])
     add_year = res_movie_info["Year"]
     add_poster = res_movie_info["Poster"]
+    add_movie_imdb_id = res_movie_info["imdbID"]
+    add_country = res_movie_info["Country"]
 
     new_movie = {
         "title": add_title,
         "rating": add_rating,
         "year_of_release": add_year,
-        "poster": add_poster
+        "poster": add_poster,
+        "note": "",
+        "imdbID": add_movie_imdb_id,
+        "country": add_country
     }
     movie_storage.add_movie(new_movie)
     print(f"\u001b[36mMovie {add_title} successfully added")
@@ -158,15 +164,33 @@ def rating_histogram():
     plt.savefig('Ratings_chart.png')
 
 
+def get_country_flag(movie_country):
+    """Retrieves country codes"""
+    if "," in movie_country:
+        first_country = movie_country.split(',')[0].strip()
+    else:
+        first_country = movie_country.strip()
+
+    iso2_country_code = coco.convert(names=first_country, to='ISO2')  # Conversion to ISO2 code
+
+    return iso2_country_code
+
+
 def serialize_movie(movie_obj):
     """Receives a movie object as parameter and returns a string containing
     the desired data for a single movie"""
     output = ''
     output += '<li>'
     output += '<div class="movie">'
-    output += f'<img class="movie-poster" src={movie_obj["poster"]}/>'
+    output += (f'<a href="https://www.imdb.com/title/{movie_obj["imdbID"]}/">'
+               f'<img class="movie-poster" src={movie_obj["poster"]}/></a>')
     output += f'<div class="movie-title">{movie_obj["title"]}</div>'
     output += f'<div class="movie-year">{movie_obj["year_of_release"]}</div>'
+    output += f'<div class="movie-rating">Rating: {movie_obj["rating"]}</div>'
+    # output += f'<img  class="movie-country" src="https://flagsapi.com/DE/shiny/32.png" >'
+    output += (f'<img class="movie-country" src="https://flagsapi.com/'
+               f'{get_country_flag(movie_obj["country"])}/shiny/32.png" >')
+    output += f'<div class="movie-note">{movie_obj["note"]}</div>'
     output += '</div>'
     output += '</li>'
     return output

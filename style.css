@@ -30,24 +30,64 @@ body {
 
 .movie {
   width: 140px;
-}
-
-.movie-title,
-.movie-year {
-  font-size: 0.8em;
-  text-align: center;
+  position: relative;
 }
 
 .movie-title {
+  font-size: 0.8em;
+  text-align: center;
   margin-top: 10px;
 }
 
-.movie-year {
+.movie-year,
+.movie-rating {
+  font-size: 0.8em;
+  text-align: center;
   color: #999;
+  margin-bottom: 5px;
+}
+
+.movie-country img {
+  margin-left: 15px;
+  align: center;
+  display: block;
+  margin: 125px;
+  vertical-align: middle;
+}
+
+.movie-country {
+  color: #666;
+  margin-left: 5px;
 }
 
 .movie-poster {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     width: 128px;
     height: 193px;
+}
+
+.movie-note {
+    display: none;
+    position: absolute;
+    top: 200px;
+    left: 0;
+    width: 105px;
+    padding: 10px;
+    background-color: #F5F5F0;
+    border: 1px solid #ddd;
+    opacity: 1.0;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+    font-size: 0.8em;
+    text-align: center;
+    z-index: 1;
+  }
+
+.movie:hover .movie-note {
+    display: block;
+}
+
+.movie-rating {
+  font-size: 0.8em;
+  text-align: center;
+  color: #378051;
 }
